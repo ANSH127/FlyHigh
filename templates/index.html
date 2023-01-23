@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}FlyHigh{% endblock title %}
+
+{% block body %}
+
+<div class="px-4 py-5 px-md-5 text-center text-lg-start"
+    style="background:url('/media/f1.jpg') no-repeat center center/cover">
+
+    
+    <section class="">
+        <!-- Jumbotron -->
+        <div class="container">
+            <div class="row gx-lg-5 align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h1 class="my-5 display-3 fw-bold ls-tight">
+                        Book your flight <br />
+                        <span class="text-primary">tickets today
+                        </span>
+                    </h1>
+
+                </div>
+
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="card">
+                        <div class="card-body py-5 px-md-5">
+                            <form method="post" action="home/">{% csrf_token %}
+                                <!-- 2 column grid layout with text inputs for the first and last names -->
+                                <div class="row">
+                                    <div class="d-flex">
+                                        <p class="mx-3"><input type='radio' name='content_type' value='1' checked />
+                                            One-way</p>
+                                        <p class=""><input type='radio' name='content_type' value='2' />
+                                            round-trip</p>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+
+
+
+                                        <div id='show'></div>
+                                        <div class="form-outline">
+                                            <label class="form-label" for="dcountry">From</label>
+                                            <input type="text" id="dcountry" name="dcountry" list="country|city"
+                                                class="form-control" required />
+                                            <datalist id="country|city">
+                                                <option value="DEL">Delhi (India)</option>
+                                                <option value="BOM">Mumbai (India)</option>
+                                                <option value="BKK">Bangkok (Thailand)</option>
+
+                                            </datalist>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                            <label class="form-label" for="acountry">To</label>
+                                            <input type="text" id="acountry" name="acountry" class="form-control"
+                                                list="country|city" required />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!-- Departare Date -->
+                                    <div class="col-md-6 mb-4">
+
+                                        <div class="form-outline">
+                                            <label class="form-label" for="ddate">Depart Date</label>
+                                            <input type="date" id="ddate" name="ddate" class="form-control" required />
+                                        </div>
+                                    </div>
+
+                                    <!-- Return Date -->
+                                    <div class="col-md-6 mb-4">
+
+                                        <div class="form-outline">
+                                            <label class="form-label" for="rdate">Return Date</label>
+                                            <input type="date" id="rdate" name="rdate" class="form-control" disabled
+                                                required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+
+                                        <div class="form-outline">
+                                            <label class="form-label" for="tadults">Adults</label>
+                                            <input type="number" id="tadults" name="tadults" class="form-control"
+                                                min="0" value="1" max="5" required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+
+                                        <div class="form-outline">
+                                            <label class="form-label" for="myclass">Class</label>
+                                            <select class="form-select" id="myclass" name="myclass">
+                                                <option selected>Economy</option>
+                                                <option value="Business">Business</option>
+                                                <option value="First Class">First Class</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Submit button -->
+                                <button type="submit" class="btn btn-warning btn-block mb-4">
+                                    Search Flight
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Jumbotron -->
+    </section>
+</div>
+{% endblock body %}
+{% block js %}
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $('input[name=content_type]').on('change', function () {
+            var n = $(this).val();
+            switch (n) {
+                case '1':
+                    document.getElementById("rdate").disabled = true;
+
+                    break;
+                case '2':
+                    document.getElementById("rdate").disabled = false;
+
+                    // $('#show').html("2nd radio button");
+                    break;
+
+            }
+        });
+    });
+
+
+</script>
+<!-- Section: Design Block -->
+{% endblock js %}
