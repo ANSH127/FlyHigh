@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+{% block title %}FlyHigh{% endblock title %}
+{% block css %}
+
+<style>
+    p {
+        height: 8px;
+        font-size: small;
+    }
+
+    body {
+        background: url('/media/sky.jfif') no-repeat center center/cover;
+        /* background-color: whitesmoke; */
+    }
+</style>
+
+{% endblock css %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-8">
+            <!-- start of ticket details -->
+            {% for item in flightinfo %}
+            <div class="card" style="background-color: black; color: wheat;">
+                <div class="card-header" style="color: red;">
+                    Ticket details
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-2"><b>{{item.plane_name}}</b>
+                                <p>{{item.plane_code}}</p>
+                            </div>
+                            <div class="col-3"><b>{{item.depart_time}}<p>{{d_date}}</p>
+                                    <p>{{item.origin}}</p>
+                                </b>
+                                <p>{{item.origin_airport}} </p>
+                            </div>
+                            <div class="col">
+                                <p class="text-center">{{item.flight_duration}}</p>
+                                <hr>
+                            </div>
+                            <div class="col mb-2"><b>{{item.arrival_time}}<p>{{a_date}}</p>
+                                    <p>{{item.destination}}</p>
+                                </b>
+                                <p>{{item.destination_airport}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr>
+
+                </div>
+                <div class="card-footer text-muted" style="color: red !important;;"><i
+                        class="fas fa-suitcase-rolling"></i>
+                    30 Kgs Check-in,7kgs Cabin
+                </div>
+            </div>
+            {% endfor %}
+            <!-- end of ticket details -->
+
+            <!-- Start of contact information card -->
+            <div class="card my-4" style="background-color: black; color: wheat;">
+                <div class="card-header" style="color: red;">
+                    Contact Information
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-outline">
+                                    <label class="form-label" for="ccode">Country Code</label>
+                                    <input type="text" id="ccode" list="country|code" class="form-control"
+                                        autocomplete="off" value="" required />
+                                    <datalist id="country|code">
+                                        <option value="+91">India(+91)</option>
+                                        <option value="+93"> Afghanistan(+93)</option>
+                                        <option value="+61">Australia(+61)</option>
+
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-outline">
+                                    <label class="form-label" for="mob">Mobile No</label>
+                                    <input type="tel" id="mob" value="" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-outline">
+                                    <label class="form-label" for="ccode">Email</label>
+                                    <input type="email" id="email" value="" class="form-control" required />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div><button class="btn btn-danger mt-3 mx-2" id="btn3" onclick="save()">Save</button></div>
+
+
+                </div>
+
+            </div>
+            <!-- end of contact information card -->
+
+            <!-- Start of Passenger details card -->
+
+            <div class="card my-3" style="background-color: black; color: wheat;">
+                <div class="card-header" style="color: red;">
+                    Passenger details
+                    <p class="text-right position-absolute top-0 end-0 mt-2 mx-3"><span id="p_value">0</span> Passenger
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <span id="passenger">
+                                <div class="card-header"> You have not added any adults to the list
+                                </div>
+                            </span>
+
+                        </div>
+
+                    </div>
+                    <div class="collapse" id="collapseExample">
+                        <h6 class="my-2"><b>IMPORTANT: </b>Enter your name as it is mentioned on your passport or
+                            ant
+                            government approved ID.</h6>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-outline">
+                                    <input type="text" id="p_name" class="form-control" value=""
+                                        placeholder="First Name" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-outline">
+                                    <input type="text" id="p_lname" class="form-control" placeholder="Last Name" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-3">
+                            <div class="col">
+                                <span><b> Gender:</b></span>
+                                <span class="mx-3"><input type='radio' name='Gender' value='M' checked />
+                                    Male</span>
+                                <span class="mx-3"><input type='radio' name='Gender' value='F' checked />
+                                    Female</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-danger" id="btn" onclick="func1()">Add</button>
+
+                    </div>
+                </div>
+
+                <div class="card-footer text-muted" style="">
+                    <p>
+                        <a class="mx-2" style="text-decoration: none;" data-bs-toggle="collapse" href="#collapseExample"
+                            aria-expanded="false" aria-controls="collapseExample">
+                            + ADD ADULT
+                        </a>
+                    </p>
+
+                </div>
+
+
+            </div>
+            <!-- end of Passenger details card -->
+
+        </div>
+
+
+        <!-- start of fare summary card -->
+        <div class="col-4">
+            <div class="card" style="background-color: black; color: wheat;">
+                <div class="card-header" style="color: red;">
+                    Fare Summary ( <span id="t_pass">{{t_passenger}}</span> passenger )
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-8"><b>Base Fare:</b></div>
+                            <div class="col"><b>&#8377;<span id="amt"> {{amt}}</span></b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8"><b>Fee & Subcharges:</b></div>
+                            <div class="col"><b>&#8377; 100.0</b></div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-muted" style="">
+                    <div class="row">
+                        <div class="col-8 mx-2" style="color: wheat;"><b>Total Fare:</b></div>
+                        <div class="col" style="color: red;"><b>&#8377;<span id="t_amt">11000</span> </b></div>
+                    </div>
+                </div>
+                <form action="/handlerequest/" method="post">{% csrf_token %}
+                    <input type="hidden" name="p_Json" id="p_Json">
+                    <input type="hidden" name="amount" id="amount">
+                    <input type="hidden" name="c_Json" id="c_Json">
+                    <input type="hidden" name="myid" id="myid" value={{myid}}>
+                    <input type="hidden" name="d_date" id="d_date" value="{{d_date}}">
+                    <input type="hidden" name="a_date" id="a_date" value="{{a_date}}">
+
+
+                    <!-- <input type="submit" class="btn btn-danger mt-2" id="btn2" value=""  onclick="payment()">Proceed To payment</input> -->
+                    <input type="submit" role="button" class="btn btn-danger my-4 mx-4" id="btn2" value="Proceed to payment" >
+                </form>
+            </div>
+
+        </div>
+        <!-- end  of fare summary card -->
+
+
+    </div>
+</div>
+
+
+
+
+{% endblock body %}
+
+
+
+{% block js %}
+
+
+<script>
+
+    localStorage.clear()
+    var pass = document.getElementById('t_pass').innerHTML;
+    console.log(parseInt(pass))
+    var amt = document.getElementById('amt').innerHTML
+    amt = parseInt(amt)
+    amt1 = amt + 100
+    var amt2 = 0
+    console.log(amt)
+    document.getElementById('t_amt').innerHTML = amt2 + 100;
+    document.getElementById('amt').innerHTML =0;
+    document.getElementById('amount').value = amt2 + 100;
+
+    function check(amount) {
+
+
+        if (amt2 == 0) {
+
+            document.getElementById('btn2').disabled = true
+            document.getElementById('btn2').value = 'Add Passenger details'
+
+        }
+        else {
+
+            document.getElementById('btn2').disabled = false
+            document.getElementById('btn2').value = 'Proceed To payment'
+
+        }
+    }
+    function func1() {
+
+        amt2 = amt2 + amt
+        document.getElementById('amt').innerHTML = amt2
+        document.getElementById('t_amt').innerHTML = amt2 + 100;
+        document.getElementById('amount').value = amt2 + 100;
+
+        check(amt2)
+        if (localStorage.getItem('p_details') == null) {
+            var p_details = {};
+            var x = 0
+
+        }
+        else {
+            var p_details = JSON.parse(localStorage.getItem('p_details'))
+            var x = Object.keys(p_details).length
+        }
+
+        p_name = document.getElementById('p_name').value;
+        p_lname = document.getElementById('p_lname').value;
+        var ele = document.getElementsByName('Gender');
+        for (let i = 0; i < ele.length; i++) {
+            if (ele[i].checked) {
+                var gen = (ele[i].value)
+            };
+
+        }
+
+        // console.log(x)
+        p_details[x] = [p_name, p_lname, gen]
+        // console.log(p_details)
+        localStorage.setItem('p_details', JSON.stringify(p_details));
+
+
+
+        // console.log(p_name, p_lname, gen)
+
+
+        var x = Object.keys(JSON.parse(localStorage.getItem('p_details'))).length
+        document.getElementById('p_value').innerHTML = x;
+        update_list(p_details)
+
+
+    }
+    function update_list(p_details) {
+        var dstr = ''
+
+        for (var item in p_details) {
+            // console.log(p_details[item][0])
+            dstr = dstr + `<div class='card-header'><b> ${p_details[item][0]}    ${p_details[item][1]}</b>,${p_details[item][2]} <i class="fas fa-minus-circle" class="btn btn-danger btn-sm mx-4"  style="float: right; font-size:large;" id=${item} onclick="delete_list(this.id)"></i>  </div>`
+        }
+        // console.log(JSON.stringify(p_details).length)
+        if (JSON.stringify(p_details).length == 2) {
+            // console.log('true')
+            dstr = `<div class="card-header"> You have not added any adults to the list 
+                            </div>`
+        }
+
+        localStorage.setItem('p_details', JSON.stringify(p_details));
+
+        // console.log(p_details)
+
+        let x = Object.keys(JSON.parse(localStorage.getItem('p_details'))).length
+
+        document.getElementById('p_value').innerHTML = x;
+
+        document.getElementById('passenger').innerHTML = dstr;
+
+
+        console.log(localStorage.getItem('p_details'))
+        var value2 = localStorage.getItem('p_details')
+        console.log(value2)
+        document.getElementById('p_Json').value = value2
+        // document.cookie = "key=" + value2
+        if (pass == x) {
+            document.getElementById('btn').disabled = true;
+            console.log('limit reached')
+
+        }
+        else {
+            document.getElementById('btn').disabled = false;
+
+        }
+
+
+
+
+    }
+    function delete_list(id) {
+        // console.log(id)
+        let p_details = JSON.parse(localStorage.getItem('p_details'))
+
+        delete p_details[id]
+        amt2 = amt2 - amt
+        document.getElementById('amt').innerHTML = amt2
+        document.getElementById('t_amt').innerHTML = amt2 + 100;
+        document.getElementById('amount').value = amt2 + 100;
+
+        check(amt2)
+
+        update_list(p_details)
+
+    }
+    var information = ''
+    function save() {
+        console.log('save')
+        var x = document.getElementById("mob").value;
+        document.getElementById("mob").disabled = true;
+        var y = document.getElementById("email").value;
+        document.getElementById("email").disabled = true;
+        var z = document.getElementById("ccode").value;
+        document.getElementById("ccode").disabled = true;
+        var val = x + " " + y + " " + z
+        document.getElementById('c_Json').value =val;
+
+        information = val
+        console.log(val)
+        // document.cookie = "info=" + val
+
+
+
+    }
+    
+    check(amt2)
+
+</script>
+
+
+{% endblock js %}

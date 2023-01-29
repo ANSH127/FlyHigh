@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% block title %}FlyHigh{% endblock title %}
+
+{% block body %}
+
+{% load extras %}
+{% load extras1 %}
+{% load extras2 %}
+<div style=" height: 90px; background-color: black; color: papayawhip;">
+    <form method="post" action="/flights/">{% csrf_token %}
+
+        <div class="row mx-3">
+            <div class="col mt-1">
+
+                <label class="form-label" for="dcountry">From</label>
+                <input type="text" id="dcountry" name="dcountry" class="form-control" value={{d_country}} />
+
+
+            </div>
+            <div class="col mt-1">
+
+                <label class="form-label" for="acountry">To</label>
+                <input type="text" id="acountry" name="acountry" class="form-control" value={{a_country}} />
+            </div>
+            <div class="col mt-1">
+
+                <label class="form-label" for="ddate">Depart Date</label>
+                <input type="date" id="ddate" name="ddate" class="form-control" value={{d_date}} />
+            </div>
+            <div class="col mt-1">
+
+                <label class="form-label" for="rdate">Return Date</label>
+                <input type="date" id="rdate" name="rdate" class="form-control" value={{r_date}} />
+            </div>
+            <div class="col mt-1">
+                <label class="form-label" for="myclass">Class</label>
+                <select class="form-select" id="myclass" name="myclass">
+                    {% if myclass == 'Economy' %}
+                    <option selected>Economy</option>
+                    <option value="Business">Business</option>
+                    <option value="First Class">First Class</option>
+                    {% elif myclass == 'Business' %}
+                    <option>Economy</option>
+                    <option selected value="Business">Business</option>
+                    <option value="First Class">First Class</option>
+                    {% else %}
+                    <option>Economy</option>
+                    <option value="Business">Business</option>
+                    <option selected value="First Class">First Class</option>
+
+
+                    {% endif %}
+                </select>
+
+            </div>
+            <div class="col mt-3">
+                <button type="submit" class="btn btn-primary mt-3">
+                    Modify Search
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+{% if flight|length >= 1 %}
+
+<div class="row" style="width: 100%;">
+    <div class="row col-3 mt-5 mx-3">
+
+
+
+        <div class="card h-100 mx-1">
+            <!-- <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/042.webp" class="card-img-top"
+          alt="Palm Springs Road" /> -->
+            <form method="post" action="/filter/">{% csrf_token %}
+                <input style="display: none;" type="text" value="{{d_country}}" name="d_con">
+                <input style="display: none;" type="text" value="{{a_country}}" name="a_con">
+                <input style="display: none;" type="text" value="{{myclass}}" name="f_class">
+                <div class="card-body ">
+                    <h4 class="card-title">Filters</h4>
+                    <label for="customRange2" class="form-label">
+                        <h6>Price range</h6>
+                    </label>
+                    
+                    <input type="range" class="form-range" min={{myclass|min_price:flight}} max={{myclass|max_price:flight}} value={{myclass|min_price:flight}}
+                        onchange="rangePrimary.innerHTML=value" name="range" id="customRange2">
+                    <p style="color: red;">&#8377; <span id="rangePrimary">{{myclass|min_price:flight}}</span></p>
+                    
+                    <h6 class="card-text mt-3">
+                        Departure From {{flight.0.origin}}
+                    </h6>
+                    <div class="row">
+                        <div class="col-3">
+
+                            <div class="text-center">
+
+                                <img src="/media/morning_inactive.png" width="20px" height="20px" alt="">
+                                <div style="font-size: 10px; margin-top: 10px;"><b>Before 6am</b></div>
+                                <input type="radio" class="text-center" value="1" name="dbtn"></input>
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-3">
+                            <div class="text-center">
+
+                                <img src="/media/noon_inactive.png" width="20px" height="20px" alt="">
+                                <div style="font-size: 10px; margin-top: 10px;"><b>6am-12pm</b></div>
+                                <input type="radio" class="text-center" value="2" name="dbtn"></input>
+                            </div>
+
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center">
+
+                                <img src="/media/evening_inactive.png" width="20px" height="20px" alt="">
+                                <div style="font-size: 10px;  margin-top: 10px;"><b>12pm-6pm</b></div>
+                                <input type="radio" class="text-center" value="3" name="dbtn"></input>
+                            </div>
+
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center">
+
+                                <img src="/media/night_inactive.png" width="20px" height="20px" alt="">
+                                <div style="font-size: 10px;  margin-top: 10px;"><b>After 6pm</b></div>
+                                <input type="radio" class="text-center" value="4" name="dbtn"></input>
+                            </div>
+
+                        </div>
+                    </div>
+                    <h6 class="my-4">Arrival at {{flight.0.destination}}</h6>
+                    <div class="row">
+                        <div class="col-3">
+
+                            <div class="text-center">
+
+                                <img src="/media/morning_inactive.png" width="20px" height="20px" alt="">
+                                <div style="font-size: 10px;  margin-top: 10px;"><b>Before 6am</b></div>
+                                <input type="radio" class="text-center" value="1" name="abtn"></input>
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-3">
+                            <div class="text-center">
+
+                                <img src="/media/noon_inactive.png" width="20px" height="20px" alt="">
+                                <div style="font-size: 10px;  margin-top: 10px;"><b>6am-12pm</b></div>
+                                <input type="radio" class="text-center" value="2" name="abtn"></input>
+                            </div>
+
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center">
+
+                                <img src="/media/evening_inactive.png" width="20px" height="20px" alt="">
+                                <div style="font-size: 10px; margin-top: 10px;"><b>12pm-6pm</b></div>
+                                <input type="radio" class="text-center" value="3" name="abtn"></input>
+                            </div>
+
+                        </div>
+                        <div class="col-3">
+                            <div class="text-center">
+
+                                <img src="/media/night_inactive.png" width="20px" height="20px" alt="">
+                                <div style="font-size: 10px; margin-top: 10px;"><b>After 6pm</b></div>
+                                <input type="radio" class="text-center" value="4" name="abtn"></input>
+                            </div>
+
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-danger my-4" value="Update Results"></input>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="container mt-5 col-8 ">
+
+
+        <div style="background-color: white;">
+            <div class="row">
+                <div class="col">
+                    <p class="mx-4"><b> Sort by:</b></p>
+                </div>
+                <div class="col">
+                    <p><b>Depart</b></p>
+                </div>
+                <div class="col">
+                </div>
+                <div class="col">
+                    <p class="text-center"><b>Arrive</b></p>
+
+                </div>
+                <div class="col">
+                    <p class="text-center"><b>Price</b></p>
+
+                </div>
+                <div class="col">
+
+                </div>
+            </div>
+        </div>
+        {% for item in flight %}
+        <div class="card my-4">
+
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <img src="/media/icon.png" width="40px" height="40px" alt="">
+                        <div>
+                            {{item.plane_name}}
+
+                            <br>
+                            {{item.plane_code}}
+
+                        </div>
+                        <!-- <p>ddd</p> -->
+                    </div>
+                    <div class="col">
+                        <b>{{item.depart_time|date_format}}</b>
+                        <p>{{item.origin}}</p>
+                    </div>
+                    <div class="col">
+                        <p class="text-center">{{item.flight_duration}}</p>
+                        <hr>
+                    </div>
+                    <div class="col text-center">
+                        <b>{{item.arrival_time|date_format}}</b>
+                        <p> {{item.destination}}</p>
+                    </div>
+
+                    <div class="col">
+                        {% if myclass == 'Economy' %}
+                        <p class="text-center" style="font-size:20px;"><b>&#8377; {{item.economy_fare}}</b></p>
+
+                        {% elif myclass == 'Business' %}
+                        <p class="text-center" style="font-size:20px;"><b>&#8377; {{item.business_fare}}</b></p>
+                        {% else %}
+                        <p class="text-center" style="font-size:20px;"><b>&#8377; {{item.first_fare}}</b></p>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="col">
+                        <a class="btn btn-danger mx-3" href="/review/{{item.sno}}">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<h1 class='text-center my-4'>No flights found for this trip {{d_country}} - {{a_country}}</h1>
+{% endif %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+    integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous" />
+
+{% endblock body %}
+
+{% block js %}
+<script>
+    localStorage.clear()
+</script>
+{% endblock js %}
