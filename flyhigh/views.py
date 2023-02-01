@@ -5,15 +5,27 @@ from django.contrib import messages
 from flyhigh.models import Flight
 import datetime,json
 from . models import Booking
-import random
 
+import random
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 
 from django.views.decorators.csrf import csrf_exempt
 from PayTm import Checksum
+
+
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
+
+
 MERCHANT_KEY = 'EAf_iZOj19wu#B5q'
 
 
 # Create your views here.
+
+def check(request):
+    return render(request,'pdfreport.html')
+
 
 def flights(request):
     global params
@@ -203,7 +215,7 @@ def review(request,myid):
             print(d_date2,a_date2)
 
             
-            params1={'flightinfo':f1[0],'flightinfo2':f2[0],'d_date':d_date1,'a_date':a_date1,'d_date2':d_date2,'a_date2':a_date2,'amt':amount1+amount2,'t_passenger':t_passenger,'myid':lst[0],'myid2':lst[1]}
+            params1={'flightinfo':f1[0],'flightinfo2':f2[0],'d_date':d_date1,'a_date':a_date1,'d_date2':d_date2,'a_date2':a_date2,'amt':amount1+amount2,'t_passenger':t_passenger,'myid':lst[0],'myid2':lst[1],'f_class':f_class}
             return render(request,'booking2.html',params1)
         
         
@@ -253,12 +265,12 @@ def review(request,myid):
         # print(y1,z1)
         # print(f1[0].depart_time,f1[0].arrival_time)
         print(f1[0].destination)
-        params1={'flightinfo':f1,'d_date':d_date1,'a_date':a_date1,'amt':amount,'t_passenger':t_passenger,'myid':myid}
+        params1={'flightinfo':f1,'d_date':d_date1,'a_date':a_date1,'amt':amount,'t_passenger':t_passenger,'myid':myid,'f_class':f_class}
         return render(request,'booking.html',params1)
 
 
 def handlerequest(request):
-    global bookingid
+    global bookingid,myinfo
     
     if request.method=='POST':
         
@@ -267,6 +279,7 @@ def handlerequest(request):
         passengar_details=request.POST.get('p_Json','')
         contact_details=request.POST.get('c_Json','')
         flight_id=request.POST.get('myid','')
+        flight_class=request.POST.get('myclass','')
         flight_d_date= request.POST.get('d_date','')
         flight_a_date= request.POST.get('a_date','')
         flight_d_date2= request.POST.get('d_date2','')
@@ -276,14 +289,29 @@ def handlerequest(request):
         mob=val[0]
         email=val[1]
         c_code=val[2]
-        f1=Flight.objects.filter(sno=flight_id)
+
+        if len(flight_id.split(','))==1: 
+            print(flight_id.split(','))
+            f1=Flight.objects.filter(sno=flight_id)
+            f3=f1
+        else:
+            lst=flight_id.split(',')
+            f1=Flight.objects.filter(sno=lst[0])
+            f2=Flight.objects.filter(sno=lst[1])
+            f3=f1.union(f2)
+            print(f3)
+
+
+
+
         # print(passengar_details)
         dict=json.loads(passengar_details)
+        
         # print(dict)
         booking=Booking(passengar_details=passengar_details,flight_info=f1[0],country_code=c_code,mob_no=mob,email=email,amount=Amount,flight_d_date=flight_d_date,flight_a_date=flight_a_date,return_flight_d_date=flight_d_date2,return_flight_a_date=flight_a_date2)
         booking.save()
         bookingid=booking.sno
-
+        myinfo={'passenger':dict,'mob':mob,'c_code':c_code,'email':email,'flightdata':f3,'flight_d_date':flight_d_date,'amount':Amount,'flight_a_date':flight_a_date,'flight_class':flight_class,'return_flight_d_date':flight_d_date2,'return_flight_a_date':flight_a_date2}
         param_dict = {
 
                 'MID': 'hDSsMm33439078158954',
@@ -319,10 +347,113 @@ def handlerequest1(request):
         if response_dict['RESPCODE'] == '01':
             print('order successful')
             Booking.objects.filter(sno=bookingid).update(status='True')
+            return render(request,'success.html')
+
 
         else:
             print('order was not successful because' + response_dict['RESPMSG'])
             Booking.objects.filter(sno=bookingid).update(status='False')
+            return render(request,'fail.html')
+
 
     return render(request, 'paymentstatus.html', {'response': response_dict})
     # return HttpResponse('done')
+
+
+
+
+def create_pdf(request):
+    global myinfo
+    mob=(myinfo['mob'])
+    email=myinfo['email']
+    d_date=myinfo['flight_d_date']
+    a_date=myinfo['flight_a_date']
+    d_date2=myinfo['return_flight_d_date']
+    a_date2=myinfo['return_flight_a_date']
+    amount=myinfo['amount']
+    pdetails=myinfo['passenger']
+    
+    
+
+    template_path = 'pdfreport.html'
+    context = {'information':myinfo['flightdata'],'mob':mob,'email':email,'d_date':d_date,'a_date2':a_date2,'d_date2':d_date2,'a_date':a_date,'amount':amount,'now':datetime.datetime.now(),'basicfare':int(amount)-100,'pdetails':pdetails,'flight_class':myinfo['flight_class']}
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="ticket.pdf"'
+    # response['Content-Disposition'] = 'attachment; filename="ticket.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+    
+
+def handleSignup(request):
+    if request.method=='POST':
+        # get the post parameter
+        username=request.POST.get('username','')
+        name=request.POST.get('name','')
+        signup_email=request.POST.get('signup_email','')
+        password=request.POST.get('password','')
+        password1=request.POST.get('password1','')
+        print(username,name,signup_email,password,password1)
+        fname=name.split()[0]
+        lname=name.split()[1]
+        # username should be atleast 10 character long
+        if len(username)>10:
+            messages.error(request,'username must be under 10 characters')
+            return redirect('/')
+        # username should be alphanumeric
+        
+        if not  username.isalnum():
+            messages.error(request,'username should only cantain letters and number')
+            return redirect('/')
+        # password should be match with confirm password field
+        if password!=password1:
+            messages.error(request,'Password does not match')
+            return redirect('/')
+
+        
+        myuser=User.objects.create_user(username,signup_email,password)
+        myuser.first_name=fname
+        myuser.last_name=lname
+        myuser.save()
+        messages.success(request,"Your FlyHigh account successfully created")
+        return redirect('/')
+
+
+    else:
+        return render(request,'404.html')
+
+
+def handleLogin(request):
+    if request.method=='POST':
+        loginusername=request.POST.get('username','')
+        loginpassword=request.POST.get('password','')
+        user=authenticate(username=loginusername, password=loginpassword)
+        if user is not None:
+            login(request,user)
+            messages.success(request,"Successfully Logged in")
+            return redirect('/')
+        else:
+            messages.error(request,'Invalid Credentials, Please Try Again')
+            return redirect('/')
+
+
+
+        
+    else:
+        return render(request,'404.html')
+
+
+def handleLogout(request):
+    logout(request)
+    messages.success(request,'Successfully Logout')
+    return redirect('/')
+    

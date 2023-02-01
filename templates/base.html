@@ -18,6 +18,10 @@
 
       margin-left: 1px !important;
     }
+
+    a {
+      color: #7e22ce !important;
+    }
   }
 </style>
 
@@ -32,27 +36,41 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
+            <a class="nav-link active " style="color: #7e22ce;" aria-current="page" href="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">My Bookings</a>
+            <a style="color: #7e22ce;" class="nav-link" href="#">My Bookings</a>
           </li>
 
         </ul>
+        {% if not user.is_authenticated %}
+        <!-- Button to trigger Login modal -->
+        <button type="button" class="btn btn-primary mx-1 my-1" data-bs-toggle="modal" data-bs-target="#login">
+          Login
+        </button>
+        <!-- Button to trigger signup modal -->
+        <button type="button" class="btn btn-primary mx-1 my-1" data-bs-toggle="modal" data-bs-target="#signup">
+          SignUp
+        </button>
+        {% else %}
         <div class="dropdown show">
           <a href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
+            <!-- <i class="fa-solid fa-user"></i> Welcome {{request.user}} -->
 
-
-            <img class="rounded-circle shadow-1-strong me-3" src="/media/f1.jpg" alt="avatar" width="50" height="50" />
-
+            <img class="rounded-circle shadow-1-strong me-3" src="/media/60111.jpg" alt="avatar" width="50"
+              height="50" />
+            <!-- Welcome {{request.user}} -->
           </a>
 
           <div class="dropdown-menu" id="dropdown" aria-labelledby="dropdownMenuLink" style="margin-left: -80px;">
-            <a class="dropdown-item" href="">hi</a>
-            <a class="dropdown-item" href="">Logout</a>
+            <a class="dropdown-item" href="">{{request.user}}</a>
+            <a class="dropdown-item" href="/logout">Logout</a>
           </div>
         </div>
+
+        {% endif %}
+
 
 
       </div>
@@ -68,6 +86,96 @@
 
 
   {% endfor %}
+
+  <!-- Signup Modal -->
+  <div class="modal fade" id="signup" tabindex="-1" aria-labelledby="signup" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="signuptitle">SignUp</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="/signup/" method="post">{% csrf_token %}
+
+
+            <div class="form-outline mb-4">
+              <input type="text" id="username" name="username" placeholder="must be unique and alphanumeric"
+                class="form-control form-control-lg" required />
+              <label class="form-label mx-2" for="username">Username</label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input type="text" id="name" name="name" placeholder="Name" class="form-control form-control-lg"
+                required />
+              <label class="form-label mx-2" for="name">Your Name</label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input type="email" id="signup_email" name="signup_email" placeholder="name@example.com"
+                class="form-control form-control-lg" required />
+              <label class="form-label mx-2" for="signup_email">Your Email</label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input type="password" id="password" name="password" placeholder="Enter your password"
+                class="form-control form-control-lg" autocomplete="off" required />
+              <label class="form-label mx-2" for="password">Password</label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input type="password" id="password1" name="password1" placeholder="Enter your password again"
+                class="form-control form-control-lg" autocomplete="off" required />
+              <label class="form-label mx-2" for="password1">Repeat your password</label>
+            </div>
+            <button type="submit" class="btn btn-primary mx-3">Submit</button>
+
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="login" tabindex="-1" aria-labelledby="login" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="logintitle">Login</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="/login/" method="post">{% csrf_token %}
+
+
+
+            <div class="form-outline mb-4">
+              <input type="text" id="lusername" name="username" placeholder="Username"
+                class="form-control form-control-lg" />
+              <label class="form-label mx-2" for="username">Username</label>
+            </div>
+
+
+            <div class="form-outline mb-4">
+              <input type="password" id="lpassword" name="password" placeholder="Enter your password"
+                class="form-control form-control-lg" autocomplete="off" />
+              <label class="form-label mx-2" for="password">Password</label>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary mx-3">Submit</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 
   {% block body %}{% endblock body %}
   {% block js %}{% endblock js %}

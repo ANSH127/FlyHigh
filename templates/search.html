@@ -1,12 +1,29 @@
 {% extends 'base.html' %}
 {% block title %}FlyHigh{% endblock title %}
+{% block css %}
+
+
+<style>
+    input {
+        color: #7e22ce !important;
+        ;
+    }
+
+    button {
+        background-color: #7e22ce !important;
+        color: white !important;
+        border: none !important;
+    }
+</style>
+
+{% endblock css %}
 
 {% block body %}
 
-<div class="px-4 py-5 px-md-5 text-center text-lg-start"
+<div class="px-4 py-5 px-md-5 text-center text-lg-start" id="bg"
     style="background:url('/media/f1.jpg') no-repeat center center/cover">
 
-    
+
     <section class="">
         <!-- Jumbotron -->
         <div class="container">
@@ -22,7 +39,7 @@
 
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="card">
-                        <div class="card-body py-5 px-md-5">
+                        <div class="card-body py-5 px-md-5" style="background-color: black; color: wheat;">
                             <form method="post" action="flights/">{% csrf_token %}
                                 <!-- 2 column grid layout with text inputs for the first and last names -->
                                 <div class="row">
@@ -85,7 +102,7 @@
                                         <div class="form-outline">
                                             <label class="form-label" for="tadults">Adults</label>
                                             <input type="number" id="tadults" name="tadults" class="form-control"
-                                                min="0" value="1" max="5" required />
+                                                min="1" value="1" max="5" required />
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-4">
@@ -117,11 +134,59 @@
         <!-- Jumbotron -->
     </section>
 </div>
+<footer class="text-center text-white" style="background-color: #f1f1f1;">
+
+    <div class="text-center text-dark mt-3" style="background-color: white; color: #7e22ce !important; ">
+
+
+
+        © 2023 Copyright:
+        <a class="text-dark" href="https://FlyHigh.com/">FlyHigh.com</a>
+
+        <!-- Instagram -->
+        <a class="btn btn-link btn-floating btn-lg text-dark" href="https://www.instagram.com/i_agarwal_ansh/"
+            role="button" data-mdb-ripple-color="dark"><i class="fab fa-instagram"></i></a>
+
+        <!-- Linkedin -->
+        <a class="btn btn-link btn-floating btn-lg text-dark" href="https://www.linkedin.com/in/ansh-agarwal-390797253/"
+            role="button" data-mdb-ripple-color="dark" style="margin: -15px !important;"><i
+                class="fab fa-linkedin"></i></a>
+        <!-- Github -->
+        <a class="btn btn-link btn-floating btn-lg text-dark" href="https://github.com/the-error4-0-4" role="button"
+            data-mdb-ripple-color="dark"><i class="fab fa-github"></i></a>
+
+    </div>
+    <!-- Copyright -->
+</footer>
+
 {% endblock body %}
 {% block js %}
 
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
+    let x2 = document.getElementById("bg")
+    x1 = 1
+
+
+    setInterval(() => {
+        if (x1 == 1) {
+
+            x2.style.background = "url('/media/plane4.jfif') no-repeat center center/cover "
+            x1 = 2
+        }
+        else if (x1 == 2) {
+            x2.style.background = "url('/media/plane3.1.jfif') no-repeat center center/cover "
+            x1 = 3
+
+        }
+        else {
+            x2.style.background = "url('/media/sky.jfif') no-repeat center center/cover "
+            x1 = 1
+
+        }
+
+    }, 20000);
 
     $(document).ready(function () {
         $('input[name=content_type]').on('change', function () {

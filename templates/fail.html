@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Payment-Failed{% endblock %}
+{% block body %}
+
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="mb-5">Payment Failed</h1>
+            <img src="/media/download.png" alt="">
+            <!-- <i class="fas fa-check-circle fa-10x text-success"></i> -->
+            <p class="mt-3">We're sorry, but your order could not be processed. Please try again later or contact
+                customer support.!</p>
+            <a href="/" class="btn btn-danger">Home</a>
+    <a class="btn btn-outline-success" href="/create_pdf/" role="button">Print Ticket</a>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
