@@ -466,9 +466,8 @@ def mybooking(request):
     val=(request.user)
     if str(val)!="AnonymousUser":
        myuser=Userdetails.objects.filter(user=request.user)
-       print(myuser)
        params={'flight':myuser}
        return render(request,"mybookings.html",params)
     
     else:
-        return render(request,'404.html')
+        return render(request,'login.html')

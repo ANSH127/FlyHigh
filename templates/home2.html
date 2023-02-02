@@ -11,6 +11,9 @@
     p{
         font-size: 12px;
     }
+    input{
+        color: #7e22ce !important;
+    }
 </style>
 {% endblock css %}
 
@@ -67,7 +70,7 @@
 
             </div>
             <div class="col mt-3">
-                <button type="submit" class="btn btn-primary mt-3">
+                <button type="submit" style="background-color: #7e22ce; border: none;" class="btn btn-primary mt-3">
                     Modify Search
                 </button>
             </div>
@@ -97,7 +100,7 @@
                     
                     <input type="range" class="form-range" min={{myclass|min_price:flight}} max={{myclass|max_price:flight}} value={{myclass|min_price:flight}}
                         onchange="rangePrimary.innerHTML=value" name="range" id="customRange2">
-                    <p style="color: red;">&#8377; <span id="rangePrimary">{{myclass|min_price:flight}}</span></p>
+                    <p style="color: #7e22ce; font-size: medium;">&#8377; <span id="rangePrimary">{{myclass|min_price:flight}}</span></p>
                     
                     <h6 class="card-text mt-3">
                         Departure From {{flight.0.origin}}
@@ -185,7 +188,7 @@
 
                         </div>
                     </div>
-                    <input  type="submit" class="btn btn-danger my-4" value="Update Results"></input>
+                    <input style="background-color: #7e22ce; border: none;"  type="submit" class="btn btn-danger my-4" value="Update Results"></input>
 
                 </div>
             </form>

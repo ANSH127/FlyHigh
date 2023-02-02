@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}FlyHigh{% endblock title %}
 
+{% block css %}
+
+<style>
+    
+    input{
+        color: #7e22ce !important;
+    }
+</style>
+{% endblock css %}
+
+
 {% block body %}
 
 {% load extras %}
@@ -171,7 +182,7 @@
 
                         </div>
                     </div>
-                    <input type="submit" style="background-color: #7e22ce; border: none;" class="btn btn-danger my-4" value="Update Results"></input>
+                    <input type="submit" style="background-color: #7e22ce; border: none; color: white !important;" class="btn btn-danger my-4" value="Update Results"></input>
 
                 </div>
             </form>

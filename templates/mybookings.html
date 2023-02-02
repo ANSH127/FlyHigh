@@ -1,13 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}Mybookings-FlyHigh{% endblock title %}
 
+{% block css %}
 
+<style>
+    
+
+    body {
+        background-color: aliceblue;
+    }
+</style>
+
+{% endblock css %}
 {% block body %}
 
 <div class="container mt-3">
     {% for item in flight  %}
     <div class="card my-2">
-        <div class="card-body">
+        <div class="card-body" style="background-color: black; color: aqua;">
 
             <div class="row">
                 <div class="col-2">
@@ -19,13 +29,21 @@
                 </div>
                 <div class="col">Ticket refrence no</div>
                 <div class="col-3 ">
-                    <h5><span class="badge text-bg-success">Success</span></h5>
+                    {% if  item.bookinginfo.status  == 'True' %}
+                    <h5><span class="badge text-bg-light">CONFIRMED</span></h5>
+                    {% elif item.bookinginfo.status  == 'False'  %}
+                    <h5><span class="badge text-bg-danger">FAILED</span></h5>
+                    {% else %}
+                    <h5><span class="badge text-bg-warning">PENDING</span></h5>
+
+                    
+                    {% endif %}
                     <p>Booked On: {{item.bookinginfo.bookingdate}} </p>
 
                 </div>
                 <div class="col">
-                    <button class="btn btn-outline-success btn-sm my-1" type="submit">Print Ticket</button>
-                    <button class="btn btn-outline-success btn-sm my-1" type="submit">Cancel Ticket</button>
+                    <button class="btn btn-outline-info btn-sm my-1" type="submit">Print Ticket</button>
+                    <button class="btn btn-outline-info btn-sm my-1" type="submit">Cancel Ticket</button>
 
                 </div>
             </div>
