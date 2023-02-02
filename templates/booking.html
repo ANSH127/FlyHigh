@@ -97,7 +97,7 @@
                         </div>
 
                     </div>
-                    <div><button class="btn btn-danger mt-3 mx-2" id="btn3" onclick="save()">Save</button></div>
+                    <div><button class="btn btn-danger mt-3 mx-2" id="btn3" style="background-color: #7e22ce; border: none;" onclick="save()">Save</button></div>
 
 
                 </div>
@@ -150,12 +150,12 @@
                                     Female</span>
                             </div>
                         </div>
-                        <button class="btn btn-danger" id="btn" onclick="func1()">Add</button>
+                        <button class="btn btn-danger" style="background-color: #7e22ce; border: none;" id="btn" onclick="func1()">Add</button>
 
                     </div>
                 </div>
 
-                <div class="card-footer text-muted" style="">
+                <div class="card-footer text-muted" style="color: #7e22ce;">
                     <p>
                         <a class="mx-2" style="text-decoration: none;" data-bs-toggle="collapse" href="#collapseExample"
                             aria-expanded="false" aria-controls="collapseExample">
@@ -210,7 +210,7 @@
 
 
                     <!-- <input type="submit" class="btn btn-danger mt-2" id="btn2" value=""  onclick="payment()">Proceed To payment</input> -->
-                    <input type="submit" role="button" class="btn btn-danger my-4 mx-4" id="btn2" value="Proceed to payment" >
+                    <input type="submit" role="button" style="background-color: #7e22ce; border: none;" class="btn btn-danger my-4 mx-4" id="btn2" value="Proceed to payment" >
                 </form>
             </div>
 
@@ -378,6 +378,7 @@
 
         information = val
         console.log(val)
+        document.getElementById('btn3').innerHTML="Saved"
         // document.cookie = "info=" + val
 
 

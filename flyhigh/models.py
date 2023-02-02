@@ -38,7 +38,16 @@ class Booking(models.Model):
     return_flight_d_date=models.CharField(max_length=50,default='')
     return_flight_a_date=models.CharField(max_length=50,default='')
     status=models.CharField(max_length=10,default='')
+    bookingdate=models.DateField(auto_now_add=True)
 
 
     def __str__(self):
         return "Order id "+str(self.sno)+" STATUS- "+self.status
+
+
+class Userdetails(models.Model):
+    sno=models.AutoField(primary_key=True)
+    user=models.CharField(max_length=100)
+    bookinginfo=models.ForeignKey(Booking,on_delete=models.CASCADE)
+
+

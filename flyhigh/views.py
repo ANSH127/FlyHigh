@@ -4,7 +4,7 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from flyhigh.models import Flight
 import datetime,json
-from . models import Booking
+from . models import Booking,Userdetails
 
 import random
 from django.template.loader import get_template
@@ -271,7 +271,7 @@ def review(request,myid):
 
 def handlerequest(request):
     global bookingid,myinfo
-    
+    print(request.user)
     if request.method=='POST':
         
         hash = random.getrandbits(128)
@@ -311,6 +311,9 @@ def handlerequest(request):
         booking=Booking(passengar_details=passengar_details,flight_info=f1[0],country_code=c_code,mob_no=mob,email=email,amount=Amount,flight_d_date=flight_d_date,flight_a_date=flight_a_date,return_flight_d_date=flight_d_date2,return_flight_a_date=flight_a_date2)
         booking.save()
         bookingid=booking.sno
+        user_1=Userdetails(user=request.user,bookinginfo=Booking.objects.filter(sno=bookingid)[0])
+        user_1.save()
+
         myinfo={'passenger':dict,'mob':mob,'c_code':c_code,'email':email,'flightdata':f3,'flight_d_date':flight_d_date,'amount':Amount,'flight_a_date':flight_a_date,'flight_class':flight_class,'return_flight_d_date':flight_d_date2,'return_flight_a_date':flight_a_date2}
         param_dict = {
 
@@ -429,7 +432,7 @@ def handleSignup(request):
 
 
     else:
-        return render(request,'404.html')
+        return render(request,'signup.html')
 
 
 def handleLogin(request):
@@ -449,7 +452,7 @@ def handleLogin(request):
 
         
     else:
-        return render(request,'404.html')
+        return render(request,'login.html')
 
 
 def handleLogout(request):
@@ -457,3 +460,15 @@ def handleLogout(request):
     messages.success(request,'Successfully Logout')
     return redirect('/')
     
+
+
+def mybooking(request):
+    val=(request.user)
+    if str(val)!="AnonymousUser":
+       myuser=Userdetails.objects.filter(user=request.user)
+       print(myuser)
+       params={'flight':myuser}
+       return render(request,"mybookings.html",params)
+    
+    else:
+        return render(request,'404.html')

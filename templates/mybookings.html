@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Mybookings-FlyHigh{% endblock title %}
+
+
+{% block body %}
+
+<div class="container mt-3">
+    {% for item in flight  %}
+    <div class="card my-2">
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-2">
+                    {{item.bookinginfo.flight_d_date}}
+                </div>
+                <div class="col-3">
+                    {{item.bookinginfo.flight_info.origin}}-{{item.bookinginfo.flight_info.destination}}
+                    <p>{{item.bookinginfo.flight_info.plane_name}} {{item.bookinginfo.flight_info.plane_code}} </p>
+                </div>
+                <div class="col">Ticket refrence no</div>
+                <div class="col-3 ">
+                    <h5><span class="badge text-bg-success">Success</span></h5>
+                    <p>Booked On: {{item.bookinginfo.bookingdate}} </p>
+
+                </div>
+                <div class="col">
+                    <button class="btn btn-outline-success btn-sm my-1" type="submit">Print Ticket</button>
+                    <button class="btn btn-outline-success btn-sm my-1" type="submit">Cancel Ticket</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+{% endblock body %}

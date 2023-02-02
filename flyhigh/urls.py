@@ -5,6 +5,7 @@ from flyhigh import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('mybooking/', views.mybooking, name='mybooking'),
     path('flights/', views.flights, name='flights'),
     path('filter/',views.filter,name='filter'),
     path('review/<str:myid>',views.review,name='review'),

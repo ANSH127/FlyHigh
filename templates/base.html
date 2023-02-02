@@ -10,6 +10,9 @@
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
     integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous" />
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/typed.js"></script>
+
 </head>
 {% block css %}{% endblock css %}
 <style>
@@ -39,19 +42,23 @@
             <a class="nav-link active " style="color: #7e22ce;" aria-current="page" href="/">Home</a>
           </li>
           <li class="nav-item">
-            <a style="color: #7e22ce;" class="nav-link" href="#">My Bookings</a>
+            <a style="color: #7e22ce;" class="nav-link" href="/mybooking/">My Bookings</a>
           </li>
 
         </ul>
         {% if not user.is_authenticated %}
         <!-- Button to trigger Login modal -->
-        <button type="button" class="btn btn-primary mx-1 my-1" data-bs-toggle="modal" data-bs-target="#login">
+        <!-- <button type="button" class="btn btn-primary mx-1 my-1" data-bs-toggle="modal" data-bs-target="#login">
           Login
-        </button>
+        </button> -->
+        <a style="background-color: #7e22ce; border: none;" href="/login/" type="button"
+          class="btn btn-primary mx-1 my-1">Login</a>
         <!-- Button to trigger signup modal -->
-        <button type="button" class="btn btn-primary mx-1 my-1" data-bs-toggle="modal" data-bs-target="#signup">
+        <!-- <button type="button" class="btn btn-primary mx-1 my-1" data-bs-toggle="modal" data-bs-target="#signup">
           SignUp
-        </button>
+        </button> -->
+        <a style="background-color: #7e22ce; border: none;" href="/signup/" type="button"
+          class="btn btn-primary mx-1 my-1">SignUp</a>
         {% else %}
         <div class="dropdown show">
           <a href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true"

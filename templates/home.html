@@ -54,7 +54,7 @@
 
             </div>
             <div class="col mt-3">
-                <button type="submit" class="btn btn-primary mt-3">
+                <button type="submit" class="btn btn-primary mt-3" style="background-color: #7e22ce; border: none;">
                     Modify Search
                 </button>
             </div>
@@ -84,8 +84,7 @@
                     
                     <input type="range" class="form-range" min={{myclass|min_price:flight}} max={{myclass|max_price:flight}} value={{myclass|min_price:flight}}
                         onchange="rangePrimary.innerHTML=value" name="range" id="customRange2">
-                    <p style="color: red;">&#8377; <span id="rangePrimary">{{myclass|min_price:flight}}</span></p>
-                    
+                    <p style="color: #7e22ce;">&#8377; <span id="rangePrimary">{{myclass|min_price:flight}}</span></p>
                     <h6 class="card-text mt-3">
                         Departure From {{flight.0.origin}}
                     </h6>
@@ -172,7 +171,7 @@
 
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-danger my-4" value="Update Results"></input>
+                    <input type="submit" style="background-color: #7e22ce; border: none;" class="btn btn-danger my-4" value="Update Results"></input>
 
                 </div>
             </form>
@@ -248,7 +247,7 @@
                     </div>
 
                     <div class="col">
-                        <a class="btn btn-danger mx-3" href="/review/{{item.sno}}">Book Now</a>
+                        <a style="background-color: #7e22ce; border: none;" class="btn btn-danger mx-3" href="/review/{{item.sno}}">Book Now</a>
                     </div>
                 </div>
             </div>
